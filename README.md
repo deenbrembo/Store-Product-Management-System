@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Example plain HTML site using GitLab Pages.
 
 Learn more about GitLab Pages at https://pages.gitlab.io and the official
@@ -62,3 +63,29 @@ unless you want to contribute back to the upstream project.
 [index.html]: https://gitlab.com/pages/plain-html/blob/master/public/index.html
 [userpages]: https://docs.gitlab.com/ce/user/project/pages/introduction.html#user-or-group-pages
 [projpages]: https://docs.gitlab.com/ce/user/project/pages/introduction.html#project-pages
+=======
+# proj-item-management
+
+## Project setup
+```
+npm install
+```
+
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
+
+### Compiles and minifies for production
+```
+npm run build
+```
+
+### Lints and fixes files
+```
+npm run lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
+>>>>>>> ac9b0bc (init)
