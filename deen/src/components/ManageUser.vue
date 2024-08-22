@@ -114,7 +114,7 @@ export default {
 
     async fetchUsers() {
       try {
-      const response = await axios.get('http://localhost:5041/api/Auth/users', {
+      const response = await axios.get('http://localhost:3000/api/Auth/users', {
         headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` }
       });
       this.users = response.data;
@@ -130,7 +130,7 @@ export default {
           role: user.role
         };
 
-        await axios.post('http://localhost:5041/api/Auth/approve-user', payload, {
+        await axios.post('http://localhost:3000/api/Auth/approve-user', payload, {
           headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` }
         });
 
@@ -147,7 +147,7 @@ export default {
         const payload = {
           userId: user.id
         };
-        const response = await axios.post('http://localhost:5041/api/Auth/reject-user', payload, {
+        const response = await axios.post('http://localhost:3000/api/Auth/reject-user', payload, {
           headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` }
         });
 

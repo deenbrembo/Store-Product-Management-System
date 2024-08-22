@@ -100,7 +100,7 @@
     methods: {
       async fetchAdmins() {
         try {
-          const response = await axios.get('http://localhost:5041/api/Auth/admins', {
+          const response = await axios.get('http://localhost:3000/api/Auth/admins', {
             headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` }
           });
           this.admins = response.data;
@@ -116,7 +116,7 @@
             userId: admin.id
           };
   
-          const response = await axios.post('http://localhost:5041/api/Auth/deactivate-admin', payload, {
+          const response = await axios.post('http://localhost:3000/api/Auth/deactivate-admin', payload, {
             headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` }
           });
   
@@ -138,7 +138,7 @@
             userId: admin.id
           };
   
-          const response = await axios.post('http://localhost:5041/api/Auth/activate-admin', payload, {
+          const response = await axios.post('http://localhost:3000/api/Auth/activate-admin', payload, {
             headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` }
           });
   

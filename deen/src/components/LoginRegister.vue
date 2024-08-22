@@ -75,7 +75,7 @@
     methods: {
       async login() {
         try {
-          const response = await axios.post('http://localhost:5041/api/Auth/login', {
+          const response = await axios.post('http://localhost:3000/api/Auth/login', {
         email: this.loginEmail,
         password: this.loginPassword
           });
@@ -132,7 +132,7 @@
 
       try {
         // Send registration request to the server
-        const response = await axios.post('http://localhost:5041/api/Auth/register', {
+        const response = await axios.post('http://localhost:3000/api/Auth/register', {
           name: this.registerName,
           email: this.registerEmail,
           phoneNumber: this.registerPhoneNumber,

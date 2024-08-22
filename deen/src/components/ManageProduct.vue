@@ -157,7 +157,7 @@
     methods: {
       async fetchProducts() {
         try {
-          const response = await fetch('http://localhost:5041/api/Auth/products', {
+          const response = await fetch('http://localhost:3000/api/Auth/products', {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('authToken')}`
             }
@@ -169,7 +169,7 @@
       },
       async registerProduct() {
         try {
-          await fetch('http://localhost:5041/api/Auth/add-product', {
+          await fetch('http://localhost:3000/api/Auth/add-product', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -191,7 +191,7 @@
       },
       async updateProduct() {
         try {
-          await fetch('http://localhost:5041/api/Auth/update-product', {
+          await fetch('http://localhost:3000/api/Auth/update-product', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -210,7 +210,7 @@
       async confirmDelete(product) {
         if (confirm('Are you sure you want to delete this product?')) {
           try {
-            await fetch('http://localhost:5041/api/Auth/remove-product', {
+            await fetch('http://localhost:3000/api/Auth/remove-product', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
