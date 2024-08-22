@@ -788,16 +788,186 @@ public async Task<IActionResult> ManageProfile([FromBody] ManageProfileRequest r
     }
 }
 
+[Authorize (Roles = "Employee")]
+[HttpPost("employee-borrow-product")]
+public async Task<IActionResult> BorrowProduct([FromBody] BorrowProductDto request)
+{
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    var userName = User.FindFirstValue(ClaimTypes.Name);
+    var userRole = User.FindFirstValue(ClaimTypes.Role);
+
+    if (request.ID <= 0 || request.Quantity <= 0)
+    {
+        return BadRequest(new { message = "ProductID, Quantity, or UserID are invalid." });
+    }
+
+    var product = await _context.Product
+        .FirstOrDefaultAsync(p => p.ID == request.ID);
+
+    if (product == null)
+    {
+        return NotFound(new { message = "Product not found." });
+    }
+
+    if (product.QuantityAvalaible < request.Quantity)
+    {
+        return BadRequest(new { message = "Insufficient quantity available." });
+    }
+
+    product.QuantityAvalaible -= request.Quantity;
+    _context.Product.Update(product);
+
+    var borrowing = new Borrowing
+    {
+        EmployeeID = userRole == "Employee" ? int.TryParse(userId, out int id) ? id : 0 : 0,
+        EmployeeName = userRole == "Employee" ? User.FindFirstValue(ClaimTypes.Name) ?? string.Empty : string.Empty,
+        ProductID = product.ID,
+        ProductName = product.ProductName,
+        Quantity = request.Quantity,
+        BorrowedAt = DateTime.UtcNow,
+        Status = "Borrowed"
+    };
+
+        _context.Borrowing.Add(borrowing);
+        await _context.SaveChangesAsync();
+        return Ok(new { message = "Product borrowed successfully." });
+
 }
 
+[Authorize(Roles = "Admin")]
+[HttpPost("admin-borrow-product")]
+public async Task<IActionResult> AdminBorrowProduct([FromBody] BorrowProductDto request)
+{
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    var userName = User.FindFirstValue(ClaimTypes.Name);
+    var userRole = User.FindFirstValue(ClaimTypes.Role);
 
+    if (request.ID <= 0 || request.Quantity <= 0)
+    {
+        return BadRequest(new { message = "ProductID, Quantity, or UserID are invalid." });
+    }
 
+    var product = await _context.Product
+        .FirstOrDefaultAsync(p => p.ID == request.ID);
 
+    if (product == null)
+    {
+        return NotFound(new { message = "Product not found." });
+    }
 
+    if (product.QuantityAvalaible < request.Quantity)
+    {
+        return BadRequest(new { message = "Insufficient quantity available." });
+    }
 
+    product.QuantityAvalaible -= request.Quantity;
+    _context.Product.Update(product);
 
+    var borrowing = new Borrowing
+    {
+        AdminID = userRole == "Admin" ? int.TryParse(userId, out int id) ? id : 0 : 0,
+        AdminName = userRole == "Admin" ? User.FindFirstValue(ClaimTypes.Name) ?? string.Empty : string.Empty,
+        ProductID = product.ID,
+        ProductName = product.ProductName,
+        Quantity = request.Quantity,
+        BorrowedAt = DateTime.UtcNow,
+        Status = "Borrowed"
+    };
 
+    _context.Borrowing.Add(borrowing);
+    await _context.SaveChangesAsync();
+    return Ok(new { message = "Product borrowed successfully." });
 
+}
+
+[Authorize(Roles = "Employee")]
+[HttpPost("employee-return-product")]
+public async Task<IActionResult> ReturnProduct([FromBody] ReturnProductDto request)
+{
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    var userName = User.FindFirstValue(ClaimTypes.Name);
+    var userRole = User.FindFirstValue(ClaimTypes.Role);
+
+    if (request.ID <= 0 || request.Quantity <= 0)
+    {
+        return BadRequest(new { message = "ProductID, Quantity, or UserID are invalid." });
+    }
+
+    var borrowing = await _context.Borrowing
+        .FirstOrDefaultAsync(b => b.ID == request.ID && b.Status == "Borrowed");
+
+    if (borrowing == null)
+    {
+        return NotFound(new { message = "Borrowing record not found." });
+    }
+
+    var product = await _context.Product
+        .FirstOrDefaultAsync(p => p.ID == borrowing.ProductID);
+
+    if (product == null)
+    {
+        return NotFound(new { message = "Product not found." });
+    }
+
+    product.QuantityAvalaible += request.Quantity;
+    _context.Product.Update(product);
+
+    borrowing.Quantity -= request.Quantity;
+    if (borrowing.Quantity == 0)
+    {
+        borrowing.Status = "Returned";
+        borrowing.ReturnedAt = DateTime.UtcNow;
+    }
+
+    _context.Borrowing.Update(borrowing);
+    await _context.SaveChangesAsync();
+    return Ok(new { message = "Product returned successfully." });
+}
+
+[Authorize(Roles = "Admin")]
+[HttpPost("admin-return-product")]
+public async Task<IActionResult> AdminReturnProduct([FromBody] ReturnProductDto request)
+{
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    var userName = User.FindFirstValue(ClaimTypes.Name);
+    var userRole = User.FindFirstValue(ClaimTypes.Role);
+
+    if (request.ID <= 0 || request.Quantity <= 0)
+    {
+        return BadRequest(new { message = "ProductID, Quantity, or UserID are invalid." });
+    }
+
+    var borrowing = await _context.Borrowing
+        .FirstOrDefaultAsync(b => b.ID == request.ID && b.Status == "Borrowed");
+
+    if (borrowing == null)
+    {
+        return NotFound(new { message = "Borrowing record not found." });
+    }
+
+    var product = await _context.Product
+        .FirstOrDefaultAsync(p => p.ID == borrowing.ProductID);
+
+    if (product == null)
+    {
+        return NotFound(new { message = "Product not found." });
+    }
+
+    product.QuantityAvalaible += request.Quantity;
+    _context.Product.Update(product);
+
+    borrowing.Quantity -= request.Quantity;
+    if (borrowing.Quantity == 0)
+    {
+        borrowing.Status = "Returned";
+        borrowing.ReturnedAt = DateTime.UtcNow;
+    }
+
+    _context.Borrowing.Update(borrowing);
+    await _context.SaveChangesAsync();
+    return Ok(new { message = "Product returned successfully." });
+}
+}
 
 
 

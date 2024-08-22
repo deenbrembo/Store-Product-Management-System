@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 public class AppDbContext : DbContext
 {
+
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
     public DbSet<HeadAdmin> HeadAdmin { get; set; }
@@ -15,6 +16,5 @@ public class AppDbContext : DbContext
 
     public DbSet<UserRegistration> UserRegistration { get; set; }
     public DbSet<Product> Product { get; set; }
-    
-
+    public DbSet<Borrowing> Borrowing { get; internal set; }
 }
