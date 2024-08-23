@@ -835,6 +835,60 @@ public async Task<IActionResult> BorrowProduct([FromBody] BorrowProductDto reque
 
 }
 
+[Authorize(Roles = "Employee")]
+[HttpPost("employee-borrow-many-products")]
+public async Task<IActionResult> BorrowManyProducts([FromBody] BorrowManyProductsDto request)
+{
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    var userName = User.FindFirstValue(ClaimTypes.Name);
+    var userRole = User.FindFirstValue(ClaimTypes.Role);
+
+    if (request.Products == null || request.Products.Count == 0)
+    {
+        return BadRequest(new { message = "Products list is empty." });
+    }
+
+    foreach (var product in request.Products)
+    {
+        if (product.ID <= 0 || product.Quantity <= 0)
+        {
+            return BadRequest(new { message = "ProductID or Quantity are invalid." });
+        }
+
+        var existingProduct = await _context.Product
+            .FirstOrDefaultAsync(p => p.ID == product.ID);
+
+        if (existingProduct == null)
+        {
+            return NotFound(new { message = "Product not found." });
+        }
+
+        if (existingProduct.QuantityAvalaible < product.Quantity)
+        {
+            return BadRequest(new { message = "Insufficient quantity available." });
+        }
+
+        existingProduct.QuantityAvalaible -= product.Quantity;
+        _context.Product.Update(existingProduct);
+
+        var borrowing = new Borrowing
+        {
+            EmployeeID = userRole == "Employee" ? int.TryParse(userId, out int id) ? id : 0 : 0,
+            EmployeeName = userRole == "Employee" ? User.FindFirstValue(ClaimTypes.Name) ?? string.Empty : string.Empty,
+            ProductID = existingProduct.ID,
+            ProductName = existingProduct.ProductName,
+            Quantity = product.Quantity,
+            BorrowedAt = DateTime.UtcNow,
+            Status = "Borrowed"
+        };
+
+        _context.Borrowing.Add(borrowing);
+    }
+
+    await _context.SaveChangesAsync();
+    return Ok(new { message = "Products borrowed successfully." });
+}
+
 [Authorize(Roles = "Admin")]
 [HttpPost("admin-borrow-product")]
 public async Task<IActionResult> AdminBorrowProduct([FromBody] BorrowProductDto request)
@@ -879,6 +933,60 @@ public async Task<IActionResult> AdminBorrowProduct([FromBody] BorrowProductDto 
     await _context.SaveChangesAsync();
     return Ok(new { message = "Product borrowed successfully." });
 
+}
+
+[Authorize (Roles = "Admin")]
+[HttpPost("admin-borrow-many-products")]
+public async Task<IActionResult> AdminBorrowManyProducts([FromBody] BorrowManyProductsDto request)
+{
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    var userName = User.FindFirstValue(ClaimTypes.Name);
+    var userRole = User.FindFirstValue(ClaimTypes.Role);
+
+    if (request.Products == null || request.Products.Count == 0)
+    {
+        return BadRequest(new { message = "Products list is empty." });
+    }
+
+    foreach (var product in request.Products)
+    {
+        if (product.ID <= 0 || product.Quantity <= 0)
+        {
+            return BadRequest(new { message = "ProductID or Quantity are invalid." });
+        }
+
+        var existingProduct = await _context.Product
+            .FirstOrDefaultAsync(p => p.ID == product.ID);
+
+        if (existingProduct == null)
+        {
+            return NotFound(new { message = "Product not found." });
+        }
+
+        if (existingProduct.QuantityAvalaible < product.Quantity)
+        {
+            return BadRequest(new { message = "Insufficient quantity available." });
+        }
+
+        existingProduct.QuantityAvalaible -= product.Quantity;
+        _context.Product.Update(existingProduct);
+
+        var borrowing = new Borrowing
+        {
+            AdminID = userRole == "Admin" ? int.TryParse(userId, out int id) ? id : 0 : 0,
+            AdminName = userRole == "Admin" ? User.FindFirstValue(ClaimTypes.Name) ?? string.Empty : string.Empty,
+            ProductID = existingProduct.ID,
+            ProductName = existingProduct.ProductName,
+            Quantity = product.Quantity,
+            BorrowedAt = DateTime.UtcNow,
+            Status = "Borrowed"
+        };
+
+        _context.Borrowing.Add(borrowing);
+    }
+
+    await _context.SaveChangesAsync();
+    return Ok(new { message = "Products borrowed successfully." });
 }
 
 [Authorize(Roles = "Employee")]
@@ -1001,8 +1109,11 @@ public async Task<IActionResult> GetMyBorrowings()
 
     return Ok(borrowings);
 }
+
+
 }
 
-
-
-
+public class BorrowManyProductsDto
+{
+    public List<BorrowProductDto>? Products { get; set; }
+}

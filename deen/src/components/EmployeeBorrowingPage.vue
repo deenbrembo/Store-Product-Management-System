@@ -138,6 +138,7 @@ async borrowproduct() {
         if (response.ok) {
             this.showNotification('success', data.message);
             this.closeBorrowPopup();
+            this.fetchProducts(); // Refresh products after borrowing
         } else {
             this.showNotification('error', data.message);
         }
@@ -146,6 +147,7 @@ async borrowproduct() {
         this.showNotification('error', 'Failed to borrow product.');
     }
 },
+
   saveCartToLocalStorage() {
     localStorage.setItem('cart', JSON.stringify(this.cart)); // Use setItem
   },
@@ -218,16 +220,27 @@ async borrowproduct() {
   async checkout() {
     if (confirm('Do you confirm you want to borrow all these products?')) {
       try {
-        await fetch('http://localhost:5000/api/borrow', {
+        const response = await fetch('http://localhost:3000/api/employee-borrow-many-products', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('authToken')}`
           },
-          body: JSON.stringify(this.cart)
+          body: JSON.stringify({
+            Products: this.cart.map(product => ({
+              ID: product.id,
+              Quantity: product.quantity
+            }))
+          })
         });
-        this.showNotification('success', 'Products successfully borrowed!');
-        this.cart = []; // Clear cart after checkout
-        this.saveCartToLocalStorage(); // Update local storage
+        const data = await response.json();
+        if (response.ok) {
+          this.showNotification('success', data.message);
+          this.cart = []; // Clear cart after checkout
+          this.saveCartToLocalStorage(); // Update local storage
+        } else {
+          this.showNotification('error', data.message);
+        }
       } catch (error) {
         this.showNotification('error', 'Failed to borrow products. Please try again.');
       }
