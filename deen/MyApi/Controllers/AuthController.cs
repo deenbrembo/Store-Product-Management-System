@@ -536,7 +536,7 @@ public async Task<IActionResult> ActivateAdmin([FromBody] ActivateRequest reques
     return Ok(new { message = "Admin activated successfully." });
 }
 
-[Authorize(Roles = "Admin")]
+[Authorize]
 [HttpGet("products")]
 public async Task<IActionResult> GetAllProducts()
 {
@@ -544,6 +544,7 @@ public async Task<IActionResult> GetAllProducts()
 
     return Ok(products);
 }
+
 
 [Authorize(Roles = "Admin")]
 [HttpPost("add-product")]
@@ -909,6 +910,11 @@ public async Task<IActionResult> ReturnProduct([FromBody] ReturnProductDto reque
         return NotFound(new { message = "Product not found." });
     }
 
+    if (request.Quantity > borrowing.Quantity)
+    {
+        return BadRequest(new { message = "Invalid quantity. Cannot return more than borrowed." });
+    }
+
     product.QuantityAvalaible += request.Quantity;
     _context.Product.Update(product);
 
@@ -953,6 +959,11 @@ public async Task<IActionResult> AdminReturnProduct([FromBody] ReturnProductDto 
         return NotFound(new { message = "Product not found." });
     }
 
+    if (request.Quantity > borrowing.Quantity)
+    {
+        return BadRequest(new { message = "Invalid quantity. Cannot return more than borrowed." });
+    }
+
     product.QuantityAvalaible += request.Quantity;
     _context.Product.Update(product);
 
@@ -966,6 +977,29 @@ public async Task<IActionResult> AdminReturnProduct([FromBody] ReturnProductDto 
     _context.Borrowing.Update(borrowing);
     await _context.SaveChangesAsync();
     return Ok(new { message = "Product returned successfully." });
+}
+
+[Authorize]
+[HttpGet("borrowings")]
+public async Task<IActionResult> GetBorrowings()
+{
+    var borrowings = await _context.Borrowing.ToListAsync();
+
+    return Ok(borrowings);
+
+}
+
+[Authorize (Roles = "Employee")]
+[HttpGet("my-borrowings")]
+public async Task<IActionResult> GetMyBorrowings()
+{
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    int parsedUserId;
+    var borrowings = await _context.Borrowing
+        .Where(b => int.TryParse(userId, out parsedUserId) && b.EmployeeID == parsedUserId)
+        .ToListAsync();
+
+    return Ok(borrowings);
 }
 }
 

@@ -13,20 +13,20 @@
         </div>
         <div class="sidebar-menu">
           <button 
-            @click="navigate('/admin/dashboard/borrowing-item')"
-            :class="{ 'active': isActive('/admin/dashboard/borrowing-item') }"
+            @click="navigate('/employee/dashboard/borrowing-item')"
+            :class="{ 'active': isActive('/employee/dashboard/borrowing-item') }"
           >
             <i class='bx bx-cart-add'></i> <span>Borrow Item</span>
           </button>
           <button 
-            @click="navigate('/admin/dashboard/return-item')"
-            :class="{ 'active': isActive('/admin/dashboard/return-item') }"
+            @click="navigate('/employee/dashboard/return-item')"
+            :class="{ 'active': isActive('/employee/dashboard/return-item') }"
           >
             <i class='bx bxs-cart'></i> <span>Return Item</span>
           </button>
           <button 
-            @click="navigate('/employee/borrowing-history')"
-            :class="{ 'active': isActive('/employee/borrowing-history') }"
+            @click="navigate('/employee/dashboard/borrow-history')"
+            :class="{ 'active': isActive('/employee/dashboard/borrow-history') }"
           >
             <i class='bx bx-history'></i> <span>Borrow History</span>
           </button>
