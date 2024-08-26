@@ -274,7 +274,8 @@ mounted() {
   .search-bar {
       display: flex;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 50px;
+      margin-top: 450px;
       }
       
       input {
@@ -282,6 +283,7 @@ mounted() {
       padding: 8px;
       border: 1px solid #ccc;
       border-radius: 5px;
+      
       }
       
       button {
@@ -298,7 +300,7 @@ mounted() {
       border: 1px solid #c1d8e9;
       padding: 20px;
       border-radius: 10px;
-      width: calc(20% - 10px); /* 5 columns with space between */
+      width: calc(20% - 20px); /* 5 columns with space between */
       text-align: center;
       background-color: rgba(0, 140, 191, 0.303);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -667,7 +669,7 @@ mounted() {
       
       @media (max-width: 480px) {
       .product-card {
-        width: 95%;
+        width: 90%;
         padding: 10px; /* Reduce padding in product cards */
       }
       

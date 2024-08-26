@@ -298,7 +298,7 @@ mounted() {
       border: 1px solid #c1d8e9;
       padding: 20px;
       border-radius: 10px;
-      width: calc(20% - 10px); /* 5 columns with space between */
+      width: calc(33.33% - 20px); /* 3 columns with space between */
       text-align: center;
       background-color: rgba(0, 140, 191, 0.303);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
