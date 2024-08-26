@@ -825,6 +825,7 @@ public async Task<IActionResult> BorrowProduct([FromBody] BorrowProductDto reque
         ProductID = product.ID,
         ProductName = product.ProductName,
         Quantity = request.Quantity,
+        QuantityBorrow = request.Quantity,
         BorrowedAt = DateTime.UtcNow,
         Status = "Borrowed"
     };
@@ -878,6 +879,7 @@ public async Task<IActionResult> BorrowManyProducts([FromBody] BorrowManyProduct
             ProductID = existingProduct.ID,
             ProductName = existingProduct.ProductName,
             Quantity = product.Quantity,
+            QuantityBorrow = product.Quantity,
             BorrowedAt = DateTime.UtcNow,
             Status = "Borrowed"
         };
@@ -925,6 +927,7 @@ public async Task<IActionResult> AdminBorrowProduct([FromBody] BorrowProductDto 
         ProductID = product.ID,
         ProductName = product.ProductName,
         Quantity = request.Quantity,
+        QuantityBorrow = request.Quantity,
         BorrowedAt = DateTime.UtcNow,
         Status = "Borrowed"
     };
@@ -978,6 +981,7 @@ public async Task<IActionResult> AdminBorrowManyProducts([FromBody] BorrowManyPr
             ProductID = existingProduct.ID,
             ProductName = existingProduct.ProductName,
             Quantity = product.Quantity,
+            QuantityBorrow = product.Quantity,
             BorrowedAt = DateTime.UtcNow,
             Status = "Borrowed"
         };
@@ -1110,10 +1114,19 @@ public async Task<IActionResult> GetMyBorrowings()
     return Ok(borrowings);
 }
 
+[Authorize (Roles = "Admin")]
+[HttpGet("admin-borrowings")]
+public async Task<IActionResult> GetAdminBorrowings()
+{
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    int parsedUserId;
+    var borrowings = await _context.Borrowing
+        .Where(b => int.TryParse(userId, out parsedUserId) && b.AdminID == parsedUserId)
+        .ToListAsync();
+
+    return Ok(borrowings);
+
 
 }
 
-public class BorrowManyProductsDto
-{
-    public List<BorrowProductDto>? Products { get; set; }
 }

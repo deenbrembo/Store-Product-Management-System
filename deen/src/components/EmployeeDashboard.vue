@@ -22,7 +22,13 @@
             @click="navigate('/employee/dashboard/return-item')"
             :class="{ 'active': isActive('/employee/dashboard/return-item') }"
           >
-            <i class='bx bxs-cart'></i> <span>Return Item</span>
+            <i class='bx bx-folder-minus'></i> <span>Return Item</span>
+          </button>
+          <button 
+            @click="navigate('/employee/dashboard/borrowed-item')"
+            :class="{ 'active': isActive('/employee/dashboard/borrowed-item') }"
+          >
+            <i class='bx bxs-cart'></i> <span>Borrowed Item</span>
           </button>
           <button 
             @click="navigate('/employee/dashboard/borrow-history')"

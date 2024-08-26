@@ -8,9 +8,12 @@ import ManageAdmin from './components/ManageAdmin.vue';
 import ManageEmployee from './components/ManageEmployee.vue';
 import ManageProfile from './components/ManageProfile.vue';
 import ManageProduct from './components/ManageProduct.vue';
-import BorrowingPage from './components/EmployeeBorrowingPage.vue';
-import ReturnProduct from './components/EmployeeReturnProduct.vue';
-import BorrowHistory from './components/EmployeeBorrowHistory.vue';
+import EmpBorrowingPage from './components/EmployeeBorrowingPage.vue';
+import EmpReturnProduct from './components/EmployeeReturnProduct.vue';
+import AdmBorrowingPage from './components/AdminBorrowingPage.vue';
+import AdmReturnProduct from './components/AdminReturnProduct.vue';
+import BorrowHistory from './components/BorrowHistory.vue';
+import BorrowedItem from './components/BorrowedItem.vue';
 
 
 const routes = [
@@ -23,15 +26,20 @@ const routes = [
     ] },
     { path: '/admin/dashboard', component: AdminDashboard, children : [
         { path: 'manage-product', component: ManageProduct },
-        { path : 'manage-profile', component: ManageProfile }
+        { path : 'manage-profile', component: ManageProfile },
+        { path : 'borrowing-item', component: AdmBorrowingPage },
+        { path : 'return-item', component: AdmReturnProduct },
+        { path : 'borrow-history', component: BorrowHistory },
+        { path : 'borrowed-item', component: BorrowedItem }
 
     ]
     },
     { path: '/employee/dashboard', component: EmployeeDashboard, children : [
         { path : 'manage-profile', component: ManageProfile },
-        { path : 'borrowing-item', component: BorrowingPage },
-        { path : 'return-item', component: ReturnProduct },
-        { path : 'borrow-history', component: BorrowHistory }
+        { path : 'borrowing-item', component: EmpBorrowingPage },
+        { path : 'return-item', component: EmpReturnProduct },
+        { path : 'borrow-history', component: BorrowHistory },
+        { path : 'borrowed-item', component: BorrowedItem }
     ]
     },
     { path: '/', redirect: '/loginregister' }

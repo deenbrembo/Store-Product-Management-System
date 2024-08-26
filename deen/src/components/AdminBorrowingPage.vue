@@ -123,7 +123,7 @@
   },
 async borrowproduct() {
     try {
-        const response = await fetch('http://localhost:3000/api/Auth/employee-borrow-product', {
+        const response = await fetch('http://localhost:3000/api/Auth/admin-borrow-product', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -220,7 +220,7 @@ async borrowproduct() {
   async checkout() {
     if (confirm('Do you confirm you want to borrow all these products?')) {
       try {
-        const response = await fetch('http://localhost:3000/api/Auth/employee-borrow-many-products', {
+        const response = await fetch('http://localhost:3000/api/Auth/admin-borrow-many-products', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

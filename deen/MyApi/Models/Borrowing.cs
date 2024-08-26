@@ -8,6 +8,7 @@
         public int ProductID { get; set; }
         public string ProductName { get; set; } = string.Empty;
         public int Quantity { get; set; }
+        public int QuantityBorrow { get; set; }
         public DateTime BorrowedAt { get; set; }
         public DateTime? ReturnedAt { get; set; }  // Nullable if returned at can be null
         public string Status { get; set; } = string.Empty;

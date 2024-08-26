@@ -28,11 +28,17 @@
             @click="navigate('/admin/dashboard/return-item')"
             :class="{ 'active': isActive('/admin/dashboard/return-item') }"
           >
-            <i class='bx bxs-cart'></i> <span>Return Item</span>
+            <i class='bx bx-folder-minus'></i> <span>Return Item</span>
           </button>
           <button 
-            @click="navigate('/admin/borrowing-history')"
-            :class="{ 'active': isActive('/admin/borrowing-history') }"
+            @click="navigate('/admin/dashboard/borrowed-item')"
+            :class="{ 'active': isActive('/admin/dashboard/borrowed-item') }"
+          >
+            <i class='bx bxs-cart'></i> <span>Borrowed Item</span>
+          </button>
+          <button 
+            @click="navigate('/admin/dashboard/borrow-history')"
+            :class="{ 'active': isActive('/admin/dashboard/borrow-history') }"
           >
             <i class='bx bx-history'></i> <span>Borrow History</span>
           </button>

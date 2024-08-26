@@ -10,18 +10,18 @@
         <table>
           <thead>
             <tr>
-              <th @click="sortTable('employeeName')">User Name</th>
+              <th @click="sortTable('adminName')">Name</th>
               <th @click="sortTable('productName')">Item Name</th>
-              <th @click="sortTable('quantity')">quantity</th>
+              <th @click="sortTable('quantityBorrow')">Borrow Quantity</th>
               <th @click="sortTable('borrowedAt')">Borrow Date</th>
               <th @click="sortTable('returnedAt')">Return Date</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="product in sortedproducts" :key="product.id">
-              <td>{{ product.employeeName }}</td>
+              <td>{{ product.adminName || product.employeeName }}</td>
               <td>{{ product.productName }}</td>
-              <td>{{ product.quantity }}</td>
+              <td>{{ product.quantityBorrow }}</td>
               <td>{{ new Date(product.borrowedAt).toLocaleString('en-MY') }}</td>
               <td>{{ product.returnedAt ? new Date(product.returnedAt).toLocaleString('en-MY') : 'Not Returned' }}</td>
             </tr>
@@ -57,8 +57,9 @@
     computed: {
       filteredproducts() {
         return this.products.filter(product => {
-          const matchesSearch = product.employeeName.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-                                product.productName.toLowerCase().includes(this.searchQuery.toLowerCase());
+          const matchesSearch = product.adminName.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                                product.productName.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                                product.employeeName.toLowerCase().includes(this.searchQuery.toLowerCase());
           const matchesStatus = product.status !== 'Borrowed';
           return matchesSearch && matchesStatus;
         });
