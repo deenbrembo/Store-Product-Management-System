@@ -36,6 +36,15 @@
           </tbody>
         </table>
       </div>
+
+        <!-- No Products to Return Popup -->
+  <div v-if="filteredproducts.length === 0" class="popup-container">
+    <div class="popup-content">
+      <h3>No Products to Return</h3>
+      <p>You currently have no borrowed products to return.</p>
+      <button @click="navigateToBorrowPage" class="btn-borrow">Borrow Products</button>
+    </div>
+  </div>
       
       <!-- Return Item Popup -->
       <div v-if="showReturnPopupVisible" class="popup-container">
@@ -141,7 +150,10 @@
       },
       closeNotification() {
         this.notification.visible = false;
-      }
+      },
+      navigateToBorrowPage() {
+      this.$router.push('borrowing-item'); // Ensure this path matches your router setup
+    },
     },
     created() {
       this.fetchProducts(); // Fetch products when component is created
@@ -377,5 +389,83 @@
     color: inherit;
     cursor: pointer;
   }
+
+  .popup-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Popup Content */
+.popup-content {
+  background: linear-gradient(to right, #d5fff6, #b7d4f0); /* Linear gradient background */
+  padding: 40px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Enhanced box shadow */
+  width: 400px;
+  transform: scale(0.9);
+  transition: transform 0.3s ease-in-out;
+  animation: scaleIn 0.5s ease-out;
+}
+
+/* Popup Content Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.8);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.popup-content h3 {
+  font-size: 20px;
+  margin-bottom: 15px;
+  color: #343a40;
+  font-weight: bold;
+  text-align: center; /* Centered text alignment */
+  letter-spacing: 0.5px; /* Slight letter spacing for readability */
+}
+
+.popup-content p {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 20px;
+  text-align: center; /* Centered text alignment */
+  line-height: 1.5; /* Improved line height for readability */
+}
+
+.popup-content .btn-borrow {
+  display: block;
+  margin: 10px auto 0;
+  padding: 8px 16px;
+  font-size: 14px;
+  background-color: #007bff; /* Blue button background */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.popup-content .btn-borrow:hover {
+  background-color: #0056b3;
+}
   </style>
   
