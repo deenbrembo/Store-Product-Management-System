@@ -71,6 +71,12 @@
   </template>
   
   <script>
+
+const config = {
+  apiBaseUrl: window.location.hostname === 'localhost' 
+    ? 'http://localhost:3000/api' 
+    : 'http://192.168.1.14:3000/api'
+};
   export default {
     data() {
       return {
@@ -94,7 +100,7 @@
     methods: {
         async fetchProducts() {
             try {
-                const response = await fetch('http://localhost:3000/api/Auth/my-borrowings', {
+                const response = await fetch(`${config.apiBaseUrl}/Auth/my-borrowings`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('authToken')}`
                     }
@@ -106,7 +112,7 @@
         },
     async processReturn() {
         try {
-            const response = await fetch('http://localhost:3000/api/Auth/employee-return-product', {
+            const response = await fetch(`${config.apiBaseUrl}/Auth/employee-return-product`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -101,6 +101,11 @@
   </template>
   
   <script>
+        const config = {
+  apiBaseUrl: window.location.hostname === 'localhost' 
+    ? 'http://localhost:3000/api' 
+    : 'http://192.168.1.14:3000/api'
+};
   export default {
     data() {
       return {
@@ -157,7 +162,7 @@
     methods: {
       async fetchProducts() {
         try {
-          const response = await fetch('http://localhost:3000/api/Auth/products', {
+          const response = await fetch(`${config.apiBaseUrl}/Auth/products`, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('authToken')}`
             }
@@ -169,7 +174,7 @@
       },
       async registerProduct() {
         try {
-          await fetch('http://localhost:3000/api/Auth/add-product', {
+          await fetch(`${config.apiBaseUrl}/Auth/add-product`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -191,7 +196,7 @@
       },
       async updateProduct() {
         try {
-          await fetch('http://localhost:3000/api/Auth/update-product', {
+          await fetch(`${config.apiBaseUrl}/Auth/update-product`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -210,7 +215,7 @@
       async confirmDelete(product) {
         if (confirm('Are you sure you want to delete this product?')) {
           try {
-            await fetch('http://localhost:3000/api/Auth/remove-product', {
+            await fetch(`${config.apiBaseUrl}/Auth/remove-product`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',

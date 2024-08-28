@@ -58,6 +58,12 @@
   
   <script>
   import axios from "axios";
+
+  const config = {
+  apiBaseUrl: window.location.hostname === 'localhost' 
+    ? 'http://localhost:3000/api' 
+    : 'http://192.168.1.14:3000/api'
+};
   export default {
     data() {
       return {
@@ -82,7 +88,7 @@
           return;
         }
         
-        const response = await axios.post('http://localhost:3000/api/Auth/manage-profile', this.form, {
+        const response = await axios.post(`${config.apiBaseUrl}/Auth/manage-profile`, this.form, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('authToken')}`,
           },

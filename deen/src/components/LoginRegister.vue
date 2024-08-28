@@ -53,8 +53,12 @@
   
   <script>
   import axios from 'axios';
-
   
+  const config = {
+  apiBaseUrl: window.location.hostname === 'localhost' 
+    ? 'http://localhost:3000/api' 
+    : 'http://192.168.1.14:3000/api'
+};
   export default {
     data() {
       return {
@@ -72,10 +76,11 @@
         }
       };
     },
+    
     methods: {
       async login() {
         try {
-          const response = await axios.post('http://localhost:3000/api/Auth/login', {
+          const response = await axios.post(`${config.apiBaseUrl}/Auth/login`, {
         email: this.loginEmail,
         password: this.loginPassword
           });
@@ -132,7 +137,7 @@
 
       try {
         // Send registration request to the server
-        const response = await axios.post('http://localhost:3000/api/Auth/register', {
+        const response = await axios.post(`${config.apiBaseUrl}/Auth/register`, {
           name: this.registerName,
           email: this.registerEmail,
           phoneNumber: this.registerPhoneNumber,

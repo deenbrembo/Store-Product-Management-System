@@ -59,6 +59,11 @@
 <script>
 import axios from 'axios';
 
+const config = {
+  apiBaseUrl: window.location.hostname === 'localhost' 
+    ? 'http://localhost:3000/api' 
+    : 'http://192.168.1.14:3000/api'
+};
 export default {
   name: 'ManageUsers',
   data() {
@@ -114,7 +119,7 @@ export default {
 
     async fetchUsers() {
       try {
-      const response = await axios.get('http://localhost:3000/api/Auth/users', {
+      const response = await axios.get(`${config.apiBaseUrl}/Auth/users`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` }
       });
       this.users = response.data;
@@ -130,7 +135,7 @@ export default {
           role: user.role
         };
 
-        await axios.post('http://localhost:3000/api/Auth/approve-user', payload, {
+        await axios.post(`${config.apiBaseUrl}/Auth/approve-user`, payload, {
           headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` }
         });
 
@@ -147,7 +152,7 @@ export default {
         const payload = {
           userId: user.id
         };
-        const response = await axios.post('http://localhost:3000/api/Auth/reject-user', payload, {
+        const response = await axios.post(`${config.apiBaseUrl}/Auth/reject-user`, payload, {
           headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` }
         });
 

@@ -47,6 +47,11 @@
 <script>
 import axios from 'axios';
 
+const config = {
+  apiBaseUrl: window.location.hostname === 'localhost' 
+    ? 'http://localhost:3000/api' 
+    : 'http://192.168.1.14:3000/api'
+};
 export default {
   name: 'ManageEmployee',
   data() {
@@ -100,7 +105,7 @@ export default {
   methods: {
     async fetchEmployees() {
       try {
-        const response = await axios.get('http://localhost:3000/api/Auth/employees', {
+        const response = await axios.get(`${config.apiBaseUrl}/Auth/employees`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` }
         });
         this.employees = response.data;
@@ -116,7 +121,7 @@ export default {
           userId: employee.id
         };
 
-        await axios.post('http://localhost:3000/api/Auth/deactivate-employee', payload, {
+        await axios.post(`${config.apiBaseUrl}/Auth/deactivate-employee`, payload, {
           headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` }
         });
 
@@ -134,7 +139,7 @@ export default {
           userId: employee.id
         };
 
-        await axios.post('http://localhost:3000/api/Auth/activate-employee', payload, {
+        await axios.post(`${config.apiBaseUrl}/Auth/activate-employee`, payload, {
           headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` }
         });
 
