@@ -108,7 +108,7 @@
     computed: {
       filteredproducts() {
         return this.products.filter(product =>
-          product.productName.toLowerCase().includes(this.searchQuery.toLowerCase())
+          product.productName.toLowerCase().includes(this.searchQuery.toLowerCase()) && product.status !== 'Removed'
         );
       }
     },

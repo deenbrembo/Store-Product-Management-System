@@ -7,8 +7,8 @@
           <div class="sidebar-burger" @click="toggleMenu">
             <i class='bx bx-menu'></i> <!-- Boxicons Menu Icon -->
           </div>
-          <div>
-            <img v-if="isMenuOpen" src="@/assets/logo1.png" class="sidebar-logo" alt="Logo">
+          <div v-if="isMenuOpen">
+            <img src="@/assets/logo1.png" class="sidebar-logo" alt="Logo">
           </div>
         </div>
         <div class="sidebar-menu">
@@ -59,6 +59,11 @@
     <div class="main-content">
       <router-view></router-view> <!-- Displays content based on route -->
     </div>
+    
+    <!-- Hamburger Button for Mobile -->
+    <div class="mobile-menu-toggle" @click="toggleMenu">
+      <i class='bx bx-menu'></i> <!-- Boxicons Menu Icon -->
+    </div>
   </div>
 </template>
 
@@ -67,7 +72,7 @@ export default {
   name: 'adminDashboard',
   data() {
     return {
-      isMenuOpen: true,  // Sidebar is open by default
+      isMenuOpen: false,  // Sidebar is closed by default on mobile
     };
   },
   methods: {
@@ -123,6 +128,7 @@ button {
   background: #3949ab;
   transition: all 0.4s;
   overflow-y: auto;
+  z-index: 1000; /* Ensure sidebar is above other content */
 }
 
 body.open .sidebar {
@@ -141,7 +147,7 @@ body.open .sidebar {
   align-items: center;
   height: 68px;
   padding: 0 1.25rem;
-  background: rgba(0, 0, 0, 0.1);
+
   border-left: 3px solid transparent;
   transition: all 0.4s;
 }
@@ -211,7 +217,7 @@ body.open .sidebar-logo {
 .sidebar-menu > button > i {
   font-size: 25px;
   color: #f9f9f9;
-  margin-right: 20px; /* Adds space between the icon and the text */
+  margin-right: 20px;
   transition: all 0.4s;
 }
 
@@ -231,9 +237,8 @@ body.open .sidebar-menu > button > span {
   text-align: left;
 }
 
-
 .sidebar-logout {
-  margin-top: auto; /* Aligns to the bottom */
+  margin-top: auto;
 }
 
 .main-content {
@@ -246,6 +251,38 @@ body.open .sidebar-menu > button > span {
 body.open .main-content {
   margin-left: 255px;
   width: calc(100% - 255px);
+}
+
+.mobile-menu-toggle {
+  display: none;
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  font-size: 25px;
+  color: #f9f9f9;
+  cursor: pointer;
+  z-index: 1000; /* Ensure it's above other content */
+}
+
+@media screen and (max-width: 768px) {
+  .sidebar {
+    width: 0;
+    display: none; /* Hide the sidebar on mobile by default */
+  }
+
+  body.open .sidebar {
+    display: block; /* Show sidebar when open on mobile */
+  }
+
+  .mobile-menu-toggle {
+    display: block; /* Show the hamburger button on mobile */
+    color: #3949ab;
+  }
+
+  body.open .main-content {
+    margin-left: 0;
+    width: 100%;
+  }
 }
 
 @media screen and (max-height: 600px) {
