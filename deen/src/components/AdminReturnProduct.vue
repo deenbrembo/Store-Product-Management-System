@@ -2,11 +2,13 @@
     <div class="manage-borrow-return">
       <div class="search-container">
         <input v-model="searchQuery" type="text" placeholder="Search borrow products..." />
-        <select v-model="statusFilter" class="status-filter">
-        <option value="">Filter by Status</option>
-        <option value="Available">Borrowed</option>
-        <option value="Unavailable">Out of Stock</option>
-      </select>
+        <div class="date-filter-container">
+          <label for="startDate">Start Date:</label>
+          <input v-model="startDate" type="date" id="startDate" class="date-filter" />
+
+          <label for="endDate">End Date:</label>
+          <input v-model="endDate" type="date" id="endDate" class="date-filter" />
+        </div>
       </div>
       
       <div class="table-container">
@@ -81,6 +83,9 @@
       return {
         products: [], // List of borrow products from the database
         searchQuery: '',
+        dateFilter: '',
+        startDate: '',
+        endDate: '',
         showReturnPopupVisible: false,
         returnquantity: 0,
         currentproduct: null, // Current product being processed
@@ -93,8 +98,16 @@
     },
     computed: {
       filteredproducts() {
-        return this.products.filter(product => product.adminName.toLowerCase().includes(this.searchQuery.toLowerCase()) && product.status !== 'Returned');
+        return this.products.filter(product => product.productName.toLowerCase().includes(this.searchQuery.toLowerCase()) && product.status !== 'Returned') // Filter products based on search query
+          .filter(product => {
+            if (!this.startDate || !this.endDate) {
+              return true;
+            }
+            const productDate = new Date(product.borrowedAt);
+            return productDate >= new Date(this.startDate) && productDate <= new Date(this.endDate);
+          });
       }
+
     },
     methods: {
         async fetchProducts() {
@@ -184,6 +197,27 @@
     border-radius: 4px;
     width: 60%;
   }
+
+  .date-filter-container {
+    display: flex;
+    align-items: center;
+    width: 40%;
+    margin: 10px auto 0; /* Center the container horizontally and add margin top 10px */
+  }
+
+  .date-filter-container label {
+    margin-right: 5px;
+    font-size: 12px;
+  }
+
+  .date-filter-container input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 10px;
+  }
+
+
 
   .table-container {
     max-width: 800px;
